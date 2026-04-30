@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gracy Christian - Portfolio</title>
+    <meta name="description" content="Portfolio of Gracy Christian, UI/UX Designer and Full Stack Developer.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="custom-cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <nav class="navbar">
+        <div class="logo">GC.</div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="global-bg">
+        <canvas id="gravityStars"></canvas>
+        <div class="blob shape-1"></div>
+        <div class="blob shape-2"></div>
+    </div>
+
+    <header id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title"><span class="gradient-text">Gracy Christian</span></h1>
+            <p class="hero-subtitle">CS Undergrad at Nirma University | UI/UX Designer & Full-Stack Developer</p>
+            <div class="hero-actions"
+                style="display: flex; gap: 1.5rem; justify-content: center; align-items: center; flex-wrap: wrap;">
+                <a href="#projects" class="btn primary-btn">View My Work</a>
+                <a href="https://drive.google.com/file/d/1ndgiBiXwQzRoHdSl6OvMcjyz4B6IxzJM/view?usp=sharing"
+                    target="_blank" rel="noopener noreferrer" class="btn secondary-btn">View Resume</a>
+            </div>
+        </div>
+    </header>
+
+    <section id="about" class="about-section">
+        <div class="section-header">
+            <h2 class="section-title">About Me</h2>
+            <p class="section-desc">Bridging the gap between beautiful design and robust engineering.</p>
+        </div>
+        <div class="about-content">
+            <div class="about-text">
+                <p>Hi, I'm <strong>Gracy Christian</strong>. I am currently pursuing my B.Tech. in Computer Science &
+                    Engineering at Nirma University. I have a profound passion for UI/UX Design and Full-Stack Web
+                    Development, focusing on building accessible, intuitive, and highly functional digital platforms.
+                </p>
+                <div style="margin-bottom: 2rem;">
+                    <a href="https://drive.google.com/file/d/1ndgiBiXwQzRoHdSl6OvMcjyz4B6IxzJM/view?usp=sharing"
+                        target="_blank" rel="noopener noreferrer" class="btn secondary-btn"
+                        style="padding: 0.8rem 1.5rem; font-size: 0.9rem;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            style="margin-right: 8px; vertical-align: middle; display: inline-block; margin-top: -2px;">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        Resume
+                    </a>
+                </div>
+                <div class="skills-container">
+                    <div class="skill-category">
+                        <h3>Design Tools</h3>
+                        <div class="skill-tags">
+                            <span class="tag">Figma</span>
+                            <span class="tag">UI/UX Design</span>
+                            <span class="tag">Wireframing</span>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <h3>Technologies</h3>
+                        <div class="skill-tags">
+                            <span class="tag">React.js</span>
+                            <span class="tag">Node.js</span>
+                            <span class="tag">MongoDB</span>
+                            <span class="tag">C++</span>
+                            <span class="tag">Python</span>
+                            <span class="tag">Java</span>
+                            <span class="tag">Firebase</span>
+                        </div>
+                    </div> <!-- Fix missing closing div for skill-category -->
+                    <div class="skill-category">
+                        <h3>Areas of Interest</h3>
+                        <div class="skill-tags">
+                            <span class="tag">UI - UX Design</span>
+                            <span class="tag">Web Development</span>
+                            <span class="tag">Problem Solving</span>
+                            <span class="tag">Software Development</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="about-right">
+                <div class="responsibility-section" style="margin-bottom: 3rem;">
+                    <h3>Position of Responsibility</h3>
+                    <div class="resp-card"
+                        style="margin-top: 1rem; background: var(--card-bg); border: 1px solid var(--card-border); padding: 1.5rem; border-radius: 15px; transition: all 0.3s ease;">
+                        <h4
+                            style="color: var(--text-color); font-size: 1.2rem; margin-bottom: 0.5rem; font-family: 'Inter', sans-serif;">
+                            Computer Society of India</h4>
+                        <p
+                            style="color: var(--accent-color); font-weight: 500; margin-bottom: 0.8rem; font-size: 0.95rem;">
+                            Core Committee Member</p>
+                        <p style="color: var(--secondary-color); line-height: 1.6; font-size: 0.95rem;">Organized and
+                            volunteered in tech events like Cubix'25 and HachNUthon 6.0, contributing to student
+                            engagement and technical growth.</p>
+                    </div>
+                </div>
+
+                <div class="coding-profiles">
+                    <h3>Coding Profiles</h3>
+                    <div class="profile-links">
+                        <a href="https://codeforces.com/profile/Grace_14" target="_blank" rel="noopener noreferrer"
+                            class="profile-card">
+                            <h4>CodeForces</h4>
+                            <p>Grace_14 (Max: 1230, Pupil)</p>
+                        </a>
+                        <a href="https://leetcode.com/u/Gracy_Christian" target="_blank" rel="noopener noreferrer"
+                            class="profile-card">
+                            <h4>LeetCode</h4>
+                            <p>Gracy_Christian</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="projects-section">
+        <div class="section-header">
+            <h2 class="section-title">Selected Projects</h2>
+            <p class="section-desc">A curated collection of my most impactful UI/UX and Development work.</p>
+        </div>
+
+        <div class="projects-grid" id="projects-container">
+            <!-- Projects will be dynamically injected here from script.js -->
+        </div>
+    </section>
+
+    <footer id="contact" class="footer">
+        <h2>Let's build something great.</h2>
+        <div class="footer-links">
+            <a href="mailto:chgracy2005@gmail.com" class="contact-link">chgracy2005@gmail.com</a>
+            <a href="https://linkedin.com/in/gracy-christian" target="_blank" class="contact-link">LinkedIn</a>
+            <a href="https://github.com/Gracy1475" target="_blank" class="contact-link">GitHub</a>
+        </div>
+    </footer>
+
+    <!-- GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
