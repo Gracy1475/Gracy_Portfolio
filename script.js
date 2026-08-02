@@ -212,6 +212,33 @@ const priorityProjects = [
         icon: "github",
         image: "assets/stackit.png"
     },
+    {
+        name: "EcoFinds – Sustainable Marketplace",
+        description: "A platform promoting sustainable consumption by enabling buying & selling of pre-owned goods. Built with search filters, cart management, and user authentication to extend product lifecycles.",
+        tags: ["React.js", "Node.js", "Hackathon", "E-Commerce"],
+        link: "https://github.com/Gracy1475/Odoo-X-NMIT-Hackathon-2025",
+        linkText: "GitHub Repo",
+        icon: "github",
+        image: "assets/ecofinds.png"
+    },
+    {
+        name: "Nexus – Career Networking Platform",
+        description: "A comprehensive networking platform tailored for students and professionals to connect, build career profiles, highlight skills, and discover mentorship opportunities.",
+        tags: ["Full-Stack", "JavaScript", "HTML/CSS", "Career Platform"],
+        link: "https://github.com/Gracy1475/Nexus---Career-Networking-platform-",
+        linkText: "GitHub Repo",
+        icon: "github",
+        image: "assets/nexus.png"
+    },
+    {
+        name: "Memory Allocation Simulator",
+        description: "Interactive web-based operating system simulator demonstrating memory management algorithms (First Fit, Best Fit, Worst Fit) with real-time visual memory block allocation.",
+        tags: ["JavaScript", "OS Simulator", "Data Structures", "Algorithms"],
+        link: "https://github.com/Gracy1475/Memory-Allocation-Simulation-",
+        linkText: "GitHub Repo",
+        icon: "github",
+        image: "assets/memorysim.png"
+    },
 ];
 
 // Helper to get SVG icons
