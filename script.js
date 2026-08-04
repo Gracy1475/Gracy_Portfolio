@@ -1,10 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Custom Cursor Logic
+    // 1. Mobile Navigation Toggle
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const navLinks = document.getElementById('nav-links');
+
+    if (mobileToggle && navLinks) {
+        mobileToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileToggle.classList.toggle('active');
+        });
+
+        // Close nav drawer on link click
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileToggle.classList.remove('active');
+            });
+        });
+    }
+
+    // 2. Custom Cursor Logic (Only on fine pointers/desktop)
     const cursor = document.querySelector('.custom-cursor');
     const follower = document.querySelector('.cursor-follower');
 
-    // Only enable custom cursor on non-touch devices
-    if (window.matchMedia("(pointer: fine)").matches) {
+    if (window.matchMedia("(pointer: fine)").matches && cursor && follower) {
         let mouseX = 0, mouseY = 0;
         let followerX = 0, followerY = 0;
 
@@ -12,12 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
             mouseX = e.clientX;
             mouseY = e.clientY;
 
-            // Instantly move the dot
             cursor.style.left = mouseX + 'px';
             cursor.style.top = mouseY + 'px';
         });
 
-        // Smooth follow effect for the outer circle
         gsap.ticker.add(() => {
             followerX += (mouseX - followerX) * 0.15;
             followerY += (mouseY - followerY) * 0.15;
@@ -26,34 +42,26 @@ document.addEventListener('DOMContentLoaded', () => {
             follower.style.top = followerY + 'px';
         });
 
-        // Function to bind hover effects
         window.bindCursorHover = () => {
-            const interactives = document.querySelectorAll('a, button, .project-card');
-            interactives.forEach(el => {
-                // Remove existing listeners to avoid duplicates
-                el.removeEventListener('mouseenter', window.cursorEnter);
-                el.removeEventListener('mouseleave', window.cursorLeave);
-
-                window.cursorEnter = () => {
-                    follower.style.width = '50px';
-                    follower.style.height = '50px';
-                    follower.style.backgroundColor = 'rgba(99, 102, 241, 0.1)';
-                };
-                window.cursorLeave = () => {
-                    follower.style.width = '30px';
-                    follower.style.height = '30px';
+            const interactables = document.querySelectorAll('a, button, .project-card, .profile-card, .contact-card, .filter-tab');
+            interactables.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    follower.style.transform = 'translate(-50%, -50%) scale(1.6)';
+                    follower.style.borderColor = '#a855f7';
+                    follower.style.backgroundColor = 'rgba(168, 85, 247, 0.08)';
+                });
+                el.addEventListener('mouseleave', () => {
+                    follower.style.transform = 'translate(-50%, -50%) scale(1)';
+                    follower.style.borderColor = 'rgba(99, 102, 241, 0.5)';
                     follower.style.backgroundColor = 'transparent';
-                };
-
-                el.addEventListener('mouseenter', window.cursorEnter);
-                el.addEventListener('mouseleave', window.cursorLeave);
+                });
             });
         };
 
         window.bindCursorHover();
     }
 
-    // GSAP Initial Animations
+    // 3. GSAP Entrance Animations
     gsap.from('.navbar', {
         y: -100,
         opacity: 0,
@@ -77,18 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ease: 'power3.out'
     });
 
-
-
-    gsap.from('.about-content', {
-        y: 50,
-        opacity: 0,
-        duration: 1,
-        scrollTrigger: {
-            trigger: '.about-section',
-            start: 'top 70%'
-        }
-    });
-
     // Morphing Background Blobs on scroll
     gsap.to('.shape-1', {
         scrollTrigger: {
@@ -107,36 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     gsap.to('.shape-2', {
         scrollTrigger: {
-            trigger: '.about-section',
-            start: 'top center',
-            end: 'bottom center',
-            scrub: 1,
-        },
-        x: '-40vw',
-        y: '20vh',
-        width: '200px',
-        height: '500px',
-        backgroundColor: '#6366f1',
-        borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%'
-    });
-
-    gsap.to('.shape-1', {
-        scrollTrigger: {
-            trigger: '.projects-section',
-            start: 'top center',
-            end: 'bottom center',
-            scrub: 1,
-        },
-        x: '-10vw',
-        y: '80vh',
-        width: '600px',
-        height: '600px',
-        backgroundColor: '#ec4899',
-        borderRadius: '50%'
-    });
-
-    gsap.to('.shape-2', {
-        scrollTrigger: {
             trigger: '.projects-section',
             start: 'top center',
             end: 'bottom center',
@@ -146,122 +112,152 @@ document.addEventListener('DOMContentLoaded', () => {
         y: '60vh',
         width: '400px',
         height: '400px',
-        backgroundColor: '#3b82f6',
+        backgroundColor: '#38bdf8',
         borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%'
     });
 
-    // Fetch and render projects
-    loadProjects();
-    
-    // Initialize Gravity Stars Background
+    // 4. Initialize Projects & Category Filter Engine
+    initProjectsEngine();
+
+    // 5. Initialize Gravity Stars Background
     initGravityStars();
 });
 
+// Projects Ecosystem Data (Curated & Categorized)
 const priorityProjects = [
     {
+        id: "udaan",
         name: "Udaan – Scholarship Discovery & Application",
         description: "Designed a user-centered platform to simplify scholarship discovery and application using extensive research and usability testing. A comprehensive UI/UX Case Study.",
         tags: ["UI/UX Design", "Figma", "FigJam", "User Research"],
         link: "https://www.behance.net/gallery/246844167/Udaan",
         linkText: "View Case Study",
         icon: "behance",
-        image: "assets/udaan.png"
+        image: "assets/udaan.png",
+        category: "uiux",
+        badge: "UI/UX Case Study"
     },
     {
-        name: "FinShield – Cybersecurity Simulation",
-        description: "Built a MERN platform to simulate phishing attacks with real-time analytics and secure authentication. Enhances employee awareness through gamification.",
+        id: "finshield",
+        name: "FinShield – Cybersecurity Simulation Platform",
+        description: "Built a MERN platform to simulate phishing attacks with real-time analytics and secure authentication. Enhances employee awareness through gamification and risk tracking.",
         tags: ["React.js", "Node.js", "Express.js", "MongoDB"],
         link: "https://github.com/Gracy1475/Finshield",
         linkText: "GitHub Repo",
         icon: "github",
-        image: "assets/finshield.png"
+        image: "assets/finshield.png",
+        category: "fullstack",
+        badge: "Cybersecurity Platform"
     },
     {
+        id: "smartshala",
         name: "SmartShala – School Management System",
-        description: "Developed a role-based system for managing attendance, assignments, and academic workflows. Digitalized administrative processes with secure data handling.",
+        description: "Developed a role-based system for managing attendance, assignments, and academic workflows. Digitalized administrative processes with secure Firebase data handling.",
         tags: ["React.js", "Firebase", "Role-based Access"],
         link: "https://github.com/Gracy1475/SmartShala-School-Management-System",
         linkText: "GitHub Repo",
         icon: "github",
-        image: "assets/smartshala.png"
+        image: "assets/smartshala.png",
+        category: "fullstack",
+        badge: "EdTech Platform"
     },
     {
+        id: "fleetflow",
         name: "FleetFlow – Fleet Management System",
-        description: "A full-stack system tracking vehicles, drivers, trips, fuel, and maintenance. Provides real-time insights and enhances safety monitoring.",
+        description: "A full-stack system tracking vehicles, drivers, trips, fuel, and maintenance. Provides real-time insights and enhances safety monitoring with a centralized dashboard.",
         tags: ["JavaScript", "Full-Stack", "Odoo-GVP"],
         link: "https://github.com/Gracy1475/Odoo-GVP",
         linkText: "GitHub Repo",
         icon: "github",
-        image: "assets/fleetflow.png"
+        image: "assets/fleetflow.png",
+        category: "fullstack",
+        badge: "Fleet Logistics"
     },
     {
-        name: "Mind Sprint – Real-time Fitness App",
-        description: "Computer vision-based fitness application using webcam input and pose estimation to analyze form, count reps, and evaluate posture in real-time.",
+        id: "mindsprint",
+        name: "Mind Sprint – Real-time Computer Vision Fitness App",
+        description: "Computer vision-based fitness application using webcam input and pose estimation to analyze exercise form, count reps, and evaluate posture in real-time.",
         tags: ["Python", "OpenCV", "MediaPipe", "Computer Vision"],
         link: "https://github.com/Gracy1475/Mind-Sprint-Hackathon",
         linkText: "GitHub Repo",
         icon: "github",
-        image: "assets/mindsprint.png"
+        image: "assets/mindsprint.png",
+        category: "aicv",
+        badge: "AI & Pose Estimation"
     },
     {
-        name: "StackIt – Q&A Platform",
-        description: "A minimal Q&A platform designed for collaborative learning. Features rich text editing, tagging, voting, accepting answers, and a notification system.",
+        id: "stackit",
+        name: "StackIt – Developer Q&A Platform",
+        description: "A minimal Q&A platform designed for collaborative learning. Features rich text editing, tagging, voting, accepting answers, and real-time notifications.",
         tags: ["Web Development", "Hackathon", "Q&A"],
         link: "https://github.com/Gracy1475/Odoo-Hackathon-2025",
         linkText: "GitHub Repo",
         icon: "github",
-        image: "assets/stackit.png"
+        image: "assets/stackit.png",
+        category: "fullstack",
+        badge: "Community Forum"
     },
     {
-        name: "EcoFinds – Sustainable Marketplace",
-        description: "A platform promoting sustainable consumption by enabling buying & selling of pre-owned goods. Built with search filters, cart management, and user authentication to extend product lifecycles.",
+        id: "ecofinds",
+        name: "EcoFinds – Sustainable Consumption Marketplace",
+        description: "A platform promoting sustainable consumption by enabling buying & selling of pre-owned goods. Built with search filters, cart management, and user authentication.",
         tags: ["React.js", "Node.js", "Hackathon", "E-Commerce"],
         link: "https://github.com/Gracy1475/Odoo-X-NMIT-Hackathon-2025",
         linkText: "GitHub Repo",
         icon: "github",
-        image: "assets/ecofinds.png"
+        image: "assets/ecofinds.png",
+        category: "fullstack",
+        badge: "Sustainable E-Commerce"
     },
     {
-        name: "Nexus – Career Networking Platform",
+        id: "nexus",
+        name: "Nexus – Student Career Networking Platform",
         description: "A comprehensive networking platform tailored for students and professionals to connect, build career profiles, highlight skills, and discover mentorship opportunities.",
         tags: ["Full-Stack", "JavaScript", "HTML/CSS", "Career Platform"],
         link: "https://github.com/Gracy1475/Nexus---Career-Networking-platform-",
         linkText: "GitHub Repo",
         icon: "github",
-        image: "assets/nexus.png"
+        image: "assets/nexus.png",
+        category: "fullstack",
+        badge: "Networking Portal"
     },
     {
+        id: "memorysim",
         name: "Memory Allocation Simulator",
-        description: "Interactive web-based operating system simulator demonstrating memory management algorithms (First Fit, Best Fit, Worst Fit) with real-time visual memory block allocation.",
+        description: "Interactive web-based operating system simulator demonstrating memory management algorithms (First Fit, Best Fit, Worst Fit) with real-time visual block allocation.",
         tags: ["JavaScript", "OS Simulator", "Data Structures", "Algorithms"],
         link: "https://github.com/Gracy1475/Memory-Allocation-Simulation-",
         linkText: "GitHub Repo",
         icon: "github",
-        image: "assets/memorysim.png"
-    },
+        image: "assets/memorysim.png",
+        category: "systems",
+        badge: "OS Simulator"
+    }
 ];
 
 // Helper to get SVG icons
 function getIcon(type) {
     if (type === 'github') {
-        return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
         </svg>`;
     }
-    return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
         <polyline points="15 3 21 3 21 9"></polyline>
         <line x1="10" y1="14" x2="21" y2="3"></line>
     </svg>`;
 }
 
+// Render Card Function
 function renderCard(project) {
     const tagsHtml = `<div class="project-tags">${project.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>`;
     const imageHtml = project.image ? `<img src="${project.image}" alt="${project.name}">` : '';
 
     return `
-        <div class="project-card" style="opacity: 0; transform: translateY(20px);">
+        <div class="project-card" data-category="${project.category}">
             <div class="project-img">
+                <span class="project-badge">${project.badge}</span>
                 ${imageHtml}
             </div>
             <div class="project-content">
@@ -279,37 +275,84 @@ function renderCard(project) {
     `;
 }
 
-async function loadProjects() {
+// Projects Filter & Search Engine
+function initProjectsEngine() {
     const container = document.getElementById('projects-container');
-    container.innerHTML = ''; // Clear placeholders
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    const searchInput = document.getElementById('project-search');
+    const countAll = document.getElementById('count-all');
 
-    // 1. Render Priority Projects First
-    priorityProjects.forEach(p => {
-        container.insertAdjacentHTML('beforeend', renderCard(p));
-    });
+    if (!container) return;
 
+    let activeCategory = 'all';
+    let searchQuery = '';
 
+    function renderFilteredProjects() {
+        container.innerHTML = '';
 
-    // 3. Animate all rendered cards
-    gsap.to('.project-card', {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: 'power3.out',
-        scrollTrigger: {
-            trigger: '.projects-grid',
-            start: 'top 80%'
+        const filtered = priorityProjects.filter(p => {
+            const matchesCategory = (activeCategory === 'all') || (p.category === activeCategory);
+            const matchesSearch = searchQuery === '' || 
+                p.name.toLowerCase().includes(searchQuery) ||
+                p.description.toLowerCase().includes(searchQuery) ||
+                p.tags.some(t => t.toLowerCase().includes(searchQuery));
+            
+            return matchesCategory && matchesSearch;
+        });
+
+        if (filtered.length === 0) {
+            container.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 1rem; color: var(--text-muted);">
+                    <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">No projects found matching "${searchQuery}"</p>
+                    <p style="font-size: 0.9rem;">Try clearing your search or switching categories.</p>
+                </div>
+            `;
+            return;
         }
+
+        filtered.forEach(p => {
+            container.insertAdjacentHTML('beforeend', renderCard(p));
+        });
+
+        // Rebind cursor hover states
+        if (window.bindCursorHover) {
+            window.bindCursorHover();
+        }
+
+        // Animate newly inserted cards
+        gsap.fromTo('.project-card', 
+            { opacity: 0, y: 20 }, 
+            { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' }
+        );
+    }
+
+    // Initial render
+    renderFilteredProjects();
+
+    // Category Tab Click Event
+    filterTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            filterTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            activeCategory = tab.getAttribute('data-category');
+            renderFilteredProjects();
+        });
     });
 
-    // Rebind custom cursor to new elements
-    if (window.bindCursorHover) {
-        window.bindCursorHover();
+    // Real-time Search Input Event
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value.trim().toLowerCase();
+            renderFilteredProjects();
+        });
+    }
+
+    if (countAll) {
+        countAll.textContent = priorityProjects.length;
     }
 }
 
-// Gravity Stars Background Implementation (Vanilla JS translation of the React Component)
+// Gravity Stars Background Implementation
 function initGravityStars() {
     const canvas = document.getElementById('gravityStars');
     if (!canvas) return;
@@ -361,13 +404,11 @@ function initGravityStars() {
             this.x += this.velocity.x;
             this.y += this.velocity.y;
             
-            // Screen wrap around
             if (this.x < 0) this.x = width;
             if (this.x > width) this.x = 0;
             if (this.y < 0) this.y = height;
             if (this.y > height) this.y = 0;
             
-            // Gravity effect (pulls towards mouse)
             let dx = mouse.x - this.x;
             let dy = mouse.y - this.y;
             let distance = Math.sqrt(dx * dx + dy * dy);
@@ -384,7 +425,6 @@ function initGravityStars() {
                 this.x += directionX;
                 this.y += directionY;
                 
-                // Enhance glow when being pulled
                 ctx.shadowBlur = 10;
                 ctx.shadowColor = '#6366f1';
             } else {
@@ -397,7 +437,7 @@ function initGravityStars() {
     
     function init() {
         stars = [];
-        const numStars = Math.floor((width * height) / 8000); // Responsive star count
+        const numStars = Math.floor((width * height) / 8500);
         for (let i = 0; i < numStars; i++) {
             stars.push(new Star());
         }
@@ -409,7 +449,6 @@ function initGravityStars() {
             stars[i].update();
         }
         
-        // Draw connecting lines between close stars (Constellation effect)
         for (let a = 0; a < stars.length; a++) {
             for (let b = a; b < stars.length; b++) {
                 let dx = stars[a].x - stars[b].x;
@@ -418,7 +457,7 @@ function initGravityStars() {
                 
                 if (distance < 60) {
                     ctx.beginPath();
-                    ctx.strokeStyle = `rgba(168, 178, 209, ${0.1 - distance/600})`;
+                    ctx.strokeStyle = `rgba(168, 178, 209, ${0.08 - distance/750})`;
                     ctx.lineWidth = 0.5;
                     ctx.moveTo(stars[a].x, stars[a].y);
                     ctx.lineTo(stars[b].x, stars[b].y);
